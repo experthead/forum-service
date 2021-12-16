@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DateRangeDto {
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "[yyyy-MM-dd][dd-MM-yyyy]")
 	LocalDate dateFrom;
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "[yyyy-MM-dd][dd-MM-yyyy]")
 	LocalDate dateTo;
 
 	public LocalDateTime dateTimeFrom() {
