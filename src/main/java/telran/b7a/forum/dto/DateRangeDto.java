@@ -10,14 +10,14 @@ public class DateRangeDto {
 	LocalDate dateFrom;
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	LocalDate dateTo;
-	
+
 	public LocalDateTime dateTimeFrom() {
 		return dateFrom.atStartOfDay();
-		
+
 	}
-	
+
 	public LocalDateTime dateTimeTo() {
 		return dateTo.atStartOfDay();
-		
+
 	}
 }
