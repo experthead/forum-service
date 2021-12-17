@@ -37,24 +37,24 @@ public class AccountingController {
 		return service.loginUser(userLogin.getLogin());
 	}
 
-	@DeleteMapping("/user/{user}")
-	public UserResponseDto deleteUser(@PathVariable String userName) {
-		return service.deleteUser(userName);
+	@DeleteMapping("/user/{login}")
+	public UserResponseDto deleteUser(@PathVariable String login) {
+		return service.deleteUser(login);
 	}
 
-	@PutMapping("/user/{user}")
-	public UserResponseDto updateUser(@PathVariable String userName, @RequestBody UserUpdateDto user) {
-		return service.updateUser(userName, user);
+	@PutMapping("/user/{login}")
+	public UserResponseDto updateUser(@PathVariable String login, @RequestBody UserUpdateDto user) {
+		return service.updateUser(login, user);
 	}
 
-	@PutMapping("/user/{user}/role/{role}")
-	public UserRolesDto addRole(@PathVariable String userName, @PathVariable String role) {
-		return service.addRole(userName, role);
+	@PutMapping("/user/{login}/role/{role}")
+	public UserRolesDto addRole(@PathVariable String login, @PathVariable String role) {
+		return service.addRole(login, role);
 	}
 
-	@DeleteMapping("/user/{user}/role/{role}")
-	public UserRolesDto deleteRole(@PathVariable String userName, @PathVariable String role) {
-		return service.deleteRole(userName, role);
+	@DeleteMapping("/user/{login}/role/{role}")
+	public UserRolesDto deleteRole(@PathVariable String login, @PathVariable String role) {
+		return service.deleteRole(login, role);
 	}
 
 	@PutMapping("/user/password")

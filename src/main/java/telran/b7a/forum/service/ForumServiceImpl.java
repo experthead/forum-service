@@ -31,7 +31,7 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostDto addNewPost(NewPostDto newPost, String author) {
-		Post post = new Post(newPost.getTitle(), newPost.getContent(), author, newPost.getTags());	
+		Post post = new Post(newPost.getTitle(), newPost.getContent(), author, newPost.getTags());
 		return modelMapper.map(postRepository.save(post), PostDto.class);
 	}
 
@@ -78,7 +78,7 @@ public class ForumServiceImpl implements ForumService {
 	@Override
 	public PostDto addComment(String id, String author, NewCommentDto newCommentDto) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-		Comment comment =new Comment(author, newCommentDto.getMessage());
+		Comment comment = new Comment(author, newCommentDto.getMessage());
 		post.addComment(comment);
 		postRepository.save(post);
 		return modelMapper.map(post, PostDto.class);
@@ -86,25 +86,19 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public Iterable<PostDto> findPostsByAuthor(String author) {
-		return postRepository.findByAuthor(author)
-				.map(p -> modelMapper.map(p, PostDto.class))
+		return postRepository.findByAuthor(author).map(p -> modelMapper.map(p, PostDto.class))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Iterable<PostDto> findByTags(List<String> tags) {
-		return postRepository.findByTags(tags)
-				.map(p -> modelMapper.map(p, PostDto.class))
-				.collect(Collectors.toList());
+		return postRepository.findByTags(tags).map(p -> modelMapper.map(p, PostDto.class)).collect(Collectors.toList());
 	}
 
 	@Override
 	public Iterable<PostDto> findByDateCreated(DateRangeDto date) {
 		return postRepository.findByDateCreated(date.dateTimeFrom(), date.dateTimeTo())
-				.map(p -> modelMapper.map(p, PostDto.class))
-				.collect(Collectors.toList());
+				.map(p -> modelMapper.map(p, PostDto.class)).collect(Collectors.toList());
 	}
-	
-	
 
 }

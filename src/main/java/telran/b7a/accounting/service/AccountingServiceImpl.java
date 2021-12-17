@@ -47,27 +47,33 @@ public class AccountingServiceImpl implements AccountingService {
 	}
 
 	@Override
-	public UserResponseDto deleteUser(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserResponseDto deleteUser(String login) {
+		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		
+		return modelMapper.map(user, UserResponseDto.class);
 	}
 
 	@Override
-	public UserResponseDto updateUser(String userName, UserUpdateDto user) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserResponseDto updateUser(String login, UserUpdateDto newUserData) {
+		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		
+		return modelMapper.map(user, UserResponseDto.class);
 	}
 
 	@Override
-	public UserRolesDto addRole(String userName, String role) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserRolesDto addRole(String login, String role) {
+		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		user.addRole(role.toUpperCase());
+		accountsRepository.save(user);
+		return  modelMapper.map(user, UserRolesDto.class);
 	}
 
 	@Override
-	public UserRolesDto deleteRole(String userName, String role) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserRolesDto deleteRole(String login, String role) {
+		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		user.deleteRole(role.toUpperCase());
+		accountsRepository.save(user);
+		return modelMapper.map(user, UserRolesDto.class);
 	}
 
 	@Override
