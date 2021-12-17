@@ -1,5 +1,7 @@
 package telran.b7a.accounting.controller;
 
+import javax.management.relation.RoleInfoNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,11 +55,11 @@ public class AccountingController {
 	}
 
 	@DeleteMapping("/user/{login}/role/{role}")
-	public UserRolesDto deleteRole(@PathVariable String login, @PathVariable String role) {
+	public UserRolesDto deleteRole(@PathVariable String login, @PathVariable String role) throws RoleInfoNotFoundException {
 		return service.deleteRole(login, role);
 	}
 
-	@PutMapping("/user/password")
+	@PutMapping("/password")
 	public void changePassword(@RequestBody CredentionalDto credentionals) {
 		service.changePassword(credentionals);
 	}

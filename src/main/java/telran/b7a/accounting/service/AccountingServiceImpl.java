@@ -3,14 +3,13 @@ package telran.b7a.accounting.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import telran.b7a.accounting.dao.AccountingMongoDBRepository;
 import telran.b7a.accounting.dto.CredentionalDto;
 import telran.b7a.accounting.dto.UserRegisterDto;
 import telran.b7a.accounting.dto.UserResponseDto;
 import telran.b7a.accounting.dto.UserRolesDto;
 import telran.b7a.accounting.dto.UserUpdateDto;
+import telran.b7a.accounting.dto.exceptions.RoleNotFoundException;
 import telran.b7a.accounting.dto.exceptions.UserAlreadyExistsException;
 import telran.b7a.accounting.dto.exceptions.UserNotFoundException;
 import telran.b7a.accounting.model.User;
@@ -49,7 +48,7 @@ public class AccountingServiceImpl implements AccountingService {
 	@Override
 	public UserResponseDto deleteUser(String login) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
-		
+		accountsRepository.deleteById(login);
 		return modelMapper.map(user, UserResponseDto.class);
 	}
 
@@ -57,29 +56,44 @@ public class AccountingServiceImpl implements AccountingService {
 	public UserResponseDto updateUser(String login, UserUpdateDto newUserData) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
 		
+		if (!newUserData.getFirstName().isBlank()) {
+			user.setFirstName(newUserData.getFirstName());
+		}
+		if (!newUserData.getLastName().isBlank()) {
+			user.setLastName(newUserData.getLastName());
+		}
+		accountsRepository.save(user);
 		return modelMapper.map(user, UserResponseDto.class);
 	}
 
 	@Override
 	public UserRolesDto addRole(String login, String role) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
-		user.addRole(role.toUpperCase());
+		if (!role.isBlank()) {
+			user.addRole(role.toUpperCase());
+		}
 		accountsRepository.save(user);
 		return  modelMapper.map(user, UserRolesDto.class);
 	}
 
 	@Override
-	public UserRolesDto deleteRole(String login, String role) {
+	public UserRolesDto deleteRole(String login, String role)  {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
-		user.deleteRole(role.toUpperCase());
+		if (!user.deleteRole(role.toUpperCase())) {
+			throw new RoleNotFoundException(role.toUpperCase());
+		}
 		accountsRepository.save(user);
 		return modelMapper.map(user, UserRolesDto.class);
 	}
 
 	@Override
 	public void changePassword(CredentionalDto credentionals) {
-		// TODO Auto-generated method stub
-
+		User user = accountsRepository.findById(credentionals.getLogin()).orElseThrow(() -> new UserNotFoundException());
+		if (!credentionals.getPassword().isBlank()) {
+			user.setPassword(credentionals.getPassword());
+		}
+		accountsRepository.save(user);
+		
 	}
 
 }
