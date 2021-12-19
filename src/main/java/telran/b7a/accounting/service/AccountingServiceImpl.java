@@ -56,11 +56,11 @@ public class AccountingServiceImpl implements AccountingService {
 	public UserResponseDto updateUser(String login, UserUpdateDto newUserData) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
 		
-		if (!newUserData.getFirstName().isBlank()) {
-			user.setFirstName(newUserData.getFirstName());
+		if (!(newUserData.getFirstName() == null || newUserData.getFirstName().isEmpty() || newUserData.getFirstName().trim().isEmpty())) {
+			user.setFirstName(newUserData.getFirstName().trim());
 		}
-		if (!newUserData.getLastName().isBlank()) {
-			user.setLastName(newUserData.getLastName());
+		if (!(newUserData.getLastName() == null || newUserData.getLastName().isEmpty() || newUserData.getLastName().trim().isEmpty())) {
+			user.setLastName(newUserData.getLastName().trim());
 		}
 		accountsRepository.save(user);
 		return modelMapper.map(user, UserResponseDto.class);
@@ -69,8 +69,8 @@ public class AccountingServiceImpl implements AccountingService {
 	@Override
 	public UserRolesDto addRole(String login, String role) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
-		if (!role.isBlank()) {
-			user.addRole(role.toUpperCase());
+		if (!(role == null || role.isEmpty() || role.trim().isEmpty())) {
+			user.addRole(role.toUpperCase().trim());
 		}
 		accountsRepository.save(user);
 		return  modelMapper.map(user, UserRolesDto.class);
@@ -89,8 +89,8 @@ public class AccountingServiceImpl implements AccountingService {
 	@Override
 	public void changePassword(CredentionalDto credentionals) {
 		User user = accountsRepository.findById(credentionals.getLogin()).orElseThrow(() -> new UserNotFoundException());
-		if (!credentionals.getPassword().isBlank()) {
-			user.setPassword(credentionals.getPassword());
+		if (!(credentionals.getPassword() == null || credentionals.getPassword().isEmpty() || credentionals.getPassword().trim().isEmpty())) {
+			user.setPassword(credentionals.getPassword().trim());
 		}
 		accountsRepository.save(user);
 		
