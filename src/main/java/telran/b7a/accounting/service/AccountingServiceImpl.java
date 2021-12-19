@@ -14,14 +14,12 @@ import telran.b7a.accounting.dto.exceptions.UserAlreadyExistsException;
 import telran.b7a.accounting.dto.exceptions.UserNotFoundException;
 import telran.b7a.accounting.model.User;
 
-
 @Service
 public class AccountingServiceImpl implements AccountingService {
-	
+
 	AccountingMongoDBRepository accountsRepository;
 	ModelMapper modelMapper;
-	
-	
+
 	@Autowired
 	public AccountingServiceImpl(AccountingMongoDBRepository accountsRepository, ModelMapper modelMapper) {
 		this.accountsRepository = accountsRepository;
@@ -55,11 +53,13 @@ public class AccountingServiceImpl implements AccountingService {
 	@Override
 	public UserResponseDto updateUser(String login, UserUpdateDto newUserData) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
-		
-		if (!(newUserData.getFirstName() == null || newUserData.getFirstName().isEmpty() || newUserData.getFirstName().trim().isEmpty())) {
+
+		if (!(newUserData.getFirstName() == null || newUserData.getFirstName().isEmpty()
+				|| newUserData.getFirstName().trim().isEmpty())) {
 			user.setFirstName(newUserData.getFirstName().trim());
 		}
-		if (!(newUserData.getLastName() == null || newUserData.getLastName().isEmpty() || newUserData.getLastName().trim().isEmpty())) {
+		if (!(newUserData.getLastName() == null || newUserData.getLastName().isEmpty()
+				|| newUserData.getLastName().trim().isEmpty())) {
 			user.setLastName(newUserData.getLastName().trim());
 		}
 		accountsRepository.save(user);
@@ -73,11 +73,11 @@ public class AccountingServiceImpl implements AccountingService {
 			user.addRole(role.toUpperCase().trim());
 		}
 		accountsRepository.save(user);
-		return  modelMapper.map(user, UserRolesDto.class);
+		return modelMapper.map(user, UserRolesDto.class);
 	}
 
 	@Override
-	public UserRolesDto deleteRole(String login, String role)  {
+	public UserRolesDto deleteRole(String login, String role) {
 		User user = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
 		if (!user.deleteRole(role.toUpperCase())) {
 			throw new RoleNotFoundException(role.toUpperCase());
@@ -88,12 +88,14 @@ public class AccountingServiceImpl implements AccountingService {
 
 	@Override
 	public void changePassword(CredentionalDto credentionals) {
-		User user = accountsRepository.findById(credentionals.getLogin()).orElseThrow(() -> new UserNotFoundException());
-		if (!(credentionals.getPassword() == null || credentionals.getPassword().isEmpty() || credentionals.getPassword().trim().isEmpty())) {
+		User user = accountsRepository.findById(credentionals.getLogin())
+				.orElseThrow(() -> new UserNotFoundException());
+		if (!(credentionals.getPassword() == null || credentionals.getPassword().isEmpty()
+				|| credentionals.getPassword().trim().isEmpty())) {
 			user.setPassword(credentionals.getPassword().trim());
 		}
 		accountsRepository.save(user);
-		
+
 	}
 
 }

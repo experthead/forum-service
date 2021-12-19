@@ -16,6 +16,7 @@ import telran.b7a.forum.dto.PostDto;
 import telran.b7a.forum.dto.exceptions.PostNotFoundException;
 import telran.b7a.forum.model.Comment;
 import telran.b7a.forum.model.Post;
+import telran.b7a.forum.service.logging.PostLogger;
 
 @Service
 public class ForumServiceImpl implements ForumService {
@@ -49,6 +50,7 @@ public class ForumServiceImpl implements ForumService {
 	}
 
 	@Override
+	@PostLogger
 	public PostDto updatePost(NewPostDto postUpdateDto, String id) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		String content = postUpdateDto.getContent();
@@ -68,6 +70,7 @@ public class ForumServiceImpl implements ForumService {
 	}
 
 	@Override
+	@PostLogger
 	public void addLike(String id) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		post.addLike();

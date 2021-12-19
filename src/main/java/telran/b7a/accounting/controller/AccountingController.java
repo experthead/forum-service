@@ -1,5 +1,7 @@
 package telran.b7a.accounting.controller;
 
+import java.util.Base64;
+
 import javax.management.relation.RoleInfoNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,8 +38,12 @@ public class AccountingController {
 	}
 	
 	@PostMapping("/login")
-	public UserResponseDto loginUser(@RequestBody CredentionalDto userLogin) {
-		return service.loginUser(userLogin.getLogin());
+	public UserResponseDto loginUser(@RequestHeader("Authorization") String token) {
+		token = token.split(" ")[1];
+		byte[] bytesDecode = Base64.getDecoder().decode(token);
+		token = new String(bytesDecode);
+		String[] credentionals = token.split(":");
+		return service.loginUser(credentionals[0]);
 	}
 
 	@DeleteMapping("/user/{login}")
@@ -59,7 +66,7 @@ public class AccountingController {
 		return service.deleteRole(login, role);
 	}
 
-	@PutMapping("/password")
+	@PutMapping("/password")  //change to "/user/password"
 	public void changePassword(@RequestBody CredentionalDto credentionals) {
 		service.changePassword(credentionals);
 	}
