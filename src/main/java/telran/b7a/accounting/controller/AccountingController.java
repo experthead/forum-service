@@ -1,5 +1,6 @@
 package telran.b7a.accounting.controller;
 
+import java.security.Principal;
 import java.util.Base64;
 
 import javax.management.relation.RoleInfoNotFoundException;
@@ -38,13 +39,18 @@ public class AccountingController {
 	}
 	
 	@PostMapping("/login")
-	public UserResponseDto loginUser(@RequestHeader("Authorization") String token) {
-		token = token.split(" ")[1];
-		byte[] bytesDecode = Base64.getDecoder().decode(token);
-		token = new String(bytesDecode);
-		String[] credentionals = token.split(":");
-		return service.loginUser(credentionals[0]);
+	public UserResponseDto loginUser(Principal principal) {
+		return service.loginUser(principal.getName());
 	}
+	
+//	@PostMapping("/login")
+//	public UserResponseDto loginUser(@RequestHeader("Authorization") String token) {
+//		token = token.split(" ")[1];
+//		byte[] bytesDecode = Base64.getDecoder().decode(token);
+//		token = new String(bytesDecode);
+//		String[] credentionals = token.split(":");
+//		return service.loginUser(credentionals[0]);
+//	}
 
 	@DeleteMapping("/user/{login}")
 	public UserResponseDto deleteUser(@PathVariable String login) {

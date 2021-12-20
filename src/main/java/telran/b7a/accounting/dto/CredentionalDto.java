@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CredentionalDto {
-	
 	String login;
 	String password;
 	
