@@ -36,7 +36,7 @@ public class AuthenticationFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		// TODO
+		
 		System.out.println(request.getMethod());
 		System.out.println(request.getServletPath());
 		
