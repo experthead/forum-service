@@ -72,7 +72,7 @@ public class AccountingController {
 		return service.deleteRole(login, role);
 	}
 
-	@PutMapping("/password")  //change to "/user/password"
+	@PutMapping("/user/password")  //change to "/user/password"
 	public void changePassword(@RequestBody CredentionalDto credentionals) {
 		service.changePassword(credentionals);
 	}

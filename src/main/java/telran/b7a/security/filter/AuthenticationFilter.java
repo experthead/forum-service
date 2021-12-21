@@ -16,12 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import telran.b7a.accounting.dao.AccountingMongoDBRepository;
 import telran.b7a.accounting.model.User;
 
 @Service
+@Order(10)
 public class AuthenticationFilter implements Filter {
 
 	AccountingMongoDBRepository repository;

@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.Singular;
 import lombok.ToString;
 
-@AllArgsConstructor
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = { "login" })
@@ -30,7 +30,9 @@ public class User {
 	String lastName;
 	@Singular
 	Set<String> roles;
-
+	
+	
+	
 	public User() {
 		roles = new HashSet<>();
 	}
