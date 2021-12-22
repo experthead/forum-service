@@ -37,8 +37,8 @@ public class UpdatePostFilter implements Filter {
 		Principal principal = request.getUserPrincipal();
 		
 		if (checkEndPoints(request.getServletPath(), request.getMethod())) {
-			String[] uriStrings = request.getRequestURI().split("/");
-			String postId = uriStrings[uriStrings.length - 1];
+			String[] servletString = request.getServletPath().split("/");
+			String postId = servletString[servletString.length - 1];
 			Post post = repository.findById(postId).orElse(null);
 			if (post == null) {
 				response.sendError(404);
