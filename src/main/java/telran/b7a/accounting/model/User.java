@@ -31,7 +31,13 @@ public class User {
 	@Singular
 	Set<String> roles;
 	
-	
+	public User(String login, String password, String firstName, String lastName) {
+		this.login = login;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.roles = new HashSet<String>();
+	}
 	
 	public User() {
 		roles = new HashSet<>();
@@ -46,5 +52,7 @@ public class User {
 		return roles.remove(role);
 		
 	}
+
+
 
 }

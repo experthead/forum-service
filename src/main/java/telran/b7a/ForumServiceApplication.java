@@ -23,6 +23,10 @@ public class ForumServiceApplication implements CommandLineRunner {
 		if (!repository.existsById("admin")) {
 			String password = BCrypt.hashpw("admin", BCrypt.gensalt());
 			User userAccount = new User("admin", password, "", "");
+			userAccount.addRole("USER".toUpperCase());
+			userAccount.addRole("MODERATOR".toUpperCase());
+			userAccount.addRole("ADMINISTRATOR".toUpperCase());
+			repository.save(userAccount);
 		}
 		
 	}
