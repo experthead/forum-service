@@ -15,20 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import telran.b7a.forum.dao.PostRepository;
+import telran.b7a.forum.model.Post;
 import telran.b7a.security.SecurityContext;
 import telran.b7a.security.UserProfile;
 
 @Service
-@Order(20)
-public class AddCommentFilter implements Filter {
-
-	SecurityContext context;
-
-	private SecurityContext securityContext;
+@Order(30)
+public class DeletePostFilter implements Filter {
+	PostRepository repository;
+	SecurityContext securityContext;
 
 	@Autowired
-	public AddCommentFilter(SecurityContext securityContext) {
-
+	public DeletePostFilter(PostRepository repository, SecurityContext securityContext) {
+		this.repository = repository;
 		this.securityContext = securityContext;
 	}
 
@@ -37,13 +37,19 @@ public class AddCommentFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
+		Principal principal = request.getUserPrincipal();
+		UserProfile user = securityContext.getUser(principal.getName());
+
 		if (checkEndPoints(request.getServletPath(), request.getMethod())) {
-			Principal principal = request.getUserPrincipal();
-			UserProfile user = securityContext.getUser(principal.getName());
-			System.err.println(request.getServletPath().split("/")[5]);
-			// if (!user.getRoles().contains("Administrator".toUpperCase())) {
-			// if(!request.getServletPath().split("/")[3].equals(user.getLogin())) {
-			if (!request.getServletPath().split("/")[5].equals(user.getLogin())) {
+			String[] servletString = request.getServletPath().split("/");
+			String postId = servletString[servletString.length - 1];
+			System.err.println(postId);
+			Post post = repository.findById(postId).orElse(null);
+			if (post == null) {
+				response.sendError(404, "Post not found");
+				return;
+			}
+			if (!((post.getAuthor().equals(user.getLogin())) || user.getRoles().contains("MODERATOR"))) {
 				response.sendError(403);
 				return;
 			}
@@ -52,8 +58,7 @@ public class AddCommentFilter implements Filter {
 	}
 
 	private boolean checkEndPoints(String path, String method) {
-
-		return path.matches("[/]forum[/]post[/]\\w+[/]comment[/]\\w+");
+		return method.equalsIgnoreCase("Delete") && path.matches("/forum/post/\\w+");
 	}
 
 }
