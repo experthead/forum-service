@@ -90,14 +90,14 @@ public class AccountingServiceImpl implements AccountingService {
 	}
 
 	@Override
-	public void changePassword(CredentionalDto credentionals) {
-		User user = accountsRepository.findById(credentionals.getLogin()).orElseThrow(() -> new UserNotFoundException());
-		if (!(credentionals.getPassword() == null || credentionals.getPassword().isEmpty()
-				|| credentionals.getPassword().trim().isEmpty())) {
-			user.setPassword(BCrypt.hashpw(credentionals.getPassword(), BCrypt.gensalt()));
-		}
-		accountsRepository.save(user);
-
+	public void changePassword(String login, String password) {
+		User userAccount = accountsRepository.findById(login).orElseThrow(() -> new UserNotFoundException());
+		userAccount.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+		accountsRepository.save(userAccount);
 	}
+
+	
+
+	
 
 }

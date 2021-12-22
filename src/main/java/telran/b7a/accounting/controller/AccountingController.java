@@ -1,8 +1,6 @@
 package telran.b7a.accounting.controller;
 
 import java.security.Principal;
-import java.util.Base64;
-
 import javax.management.relation.RoleInfoNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import telran.b7a.accounting.dto.CredentionalDto;
 import telran.b7a.accounting.dto.UserUpdateDto;
 import telran.b7a.accounting.dto.UserResponseDto;
 import telran.b7a.accounting.dto.UserRolesDto;
@@ -71,10 +68,14 @@ public class AccountingController {
 	public UserRolesDto deleteRole(@PathVariable String login, @PathVariable String role) throws RoleInfoNotFoundException {
 		return service.deleteRole(login, role);
 	}
-
-	@PutMapping("/user/password")  //change to "/user/password"
-	public void changePassword(@RequestBody CredentionalDto credentionals) {
-		service.changePassword(credentionals);
+	
+	@PutMapping("/password")  //change to "/user/password"
+	public void changePassword(Principal principal, @RequestHeader("X-Password") String password) {
+		service.changePassword(principal.getName(), password);
 	}
+//	@PutMapping("/password")  //change to "/user/password"
+//	public void changePassword(@RequestBody CredentionalDto credentionals) {
+//		service.changePassword(credentionals);
+//	}
 
 }

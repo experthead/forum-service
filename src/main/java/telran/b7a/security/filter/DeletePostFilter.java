@@ -52,7 +52,7 @@ public class DeletePostFilter implements Filter {
 			if (!((post.getAuthor().equals(user.getLogin())) || user.getRoles().contains("MODERATOR"))) {
 				response.sendError(403);
 				return;
-			}
+			} //вопрос удаления принципала из контекста безопасноти после прохождения всех фильтров
 		}
 		chain.doFilter(request, response);
 	}
